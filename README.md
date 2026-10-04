@@ -31,7 +31,8 @@ Ships with the **New Regime (FY 2025-26)** and **Old Regime** slabs, but the who
 seconds, no code change:
 
 - **Editable slab grid** — add / remove / change any slab, standard deduction, §87A rebate (max + income limit), and cess, right in the page; recalculates live
-- **Save / load regimes** — export your setup as a JSON file and re-import it later, or save multiple named regimes and switch between them
+- **Auto-save in your browser** — every edit is saved to `localStorage`, so your custom regimes are still there next time you open the page on the same browser (no re-import needed). A **Reset** button restores the shipped defaults.
+- **Save / load regimes** — export your setup as a JSON file and re-import it later (to move it to another machine or share it), or save multiple named regimes and switch between them
 - **Old vs New comparison** — enter income once, see both side by side with how much the better choice saves
 - Full **slab-wise breakdown** + take-home
 
