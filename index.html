@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>India GST & Income Tax Calculator</title>
+<style>
+  :root{--paper:#f7f6f2;--panel:#fff;--ink:#1b1b19;--muted:#55616e;--dim:#8a8d86;--line:#e6e3da;
+    --accent:#c2410c;--accent2:#0a7a4f;--accent-soft:#c2410c10;--good:#0a7a4f;--shadow:0 1px 2px rgba(20,25,30,.04),0 6px 20px rgba(20,25,30,.06);}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;background:var(--paper);color:var(--ink);line-height:1.45;font-size:14px}
+  .wrap{max-width:860px;margin:0 auto;padding:28px 22px 60px}
+  header.top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px;border-bottom:2px solid var(--accent);padding-bottom:15px}
+  .brand h1{font-size:22px;font-weight:700}.brand .sub{color:var(--muted);font-size:13px;margin-top:4px;max-width:60ch}
+  .by{text-align:right;font-size:12px;color:var(--muted)}.by a{color:var(--accent);text-decoration:none}
+  .note{background:var(--accent-soft);border:1px solid var(--line);border-left:3px solid var(--accent);padding:10px 14px;border-radius:6px;font-size:12.5px;color:var(--muted);margin:18px 0 18px}
+  .note b{color:var(--ink)}
+  .maintabs{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:18px}
+  .maintabs button{font:inherit;font-size:14px;font-weight:700;padding:11px 22px;border:none;background:var(--panel);color:var(--muted);cursor:pointer}
+  .maintabs button+button{border-left:1px solid var(--line)}
+  .maintabs button.active{background:var(--accent);color:#fff}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:20px;margin-bottom:16px}
+  .fld{display:flex;flex-direction:column;gap:5px;margin-bottom:15px}
+  .fld label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+  .fld input,.fld select{font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)}
+  .fld input:focus,.fld select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:560px){.row2{grid-template-columns:1fr}}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;margin-top:3px}
+  .seg button{font:inherit;font-size:13.5px;font-weight:600;padding:9px 15px;border:none;background:var(--paper);color:var(--muted);cursor:pointer}
+  .seg button+button{border-left:1px solid var(--line)}.seg button.active{background:var(--accent);color:#fff}
+  .result{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:2px}
+  @media(max-width:560px){.result{grid-template-columns:1fr}}
+  .rc{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:15px 16px;box-shadow:var(--shadow);text-align:center}
+  .rc.big{border-top:3px solid var(--accent)}
+  .rc .l{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;font-weight:600}
+  .rc .v{font-size:23px;font-weight:800;margin-top:5px;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+  h2{font-size:12.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--accent);margin:18px 0 10px}
+  table{width:100%;border-collapse:collapse;font-size:13px;background:var(--panel);border:1px solid var(--line);border-radius:11px;overflow:hidden}
+  th,td{padding:9px 14px;border-bottom:1px solid var(--line);text-align:left}
+  th{font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--dim);font-weight:700}
+  td.num{text-align:right;font-variant-numeric:tabular-nums}tr:last-child td{border-bottom:none}
+  tr.total{font-weight:700;background:var(--accent-soft)}
+  .pane{display:none}.pane.active{display:block}
+  .hint{font-size:11.5px;color:var(--dim);margin-top:4px}
+  footer{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);font-size:12px;color:var(--dim);text-align:center}
+  footer a{color:var(--accent);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><h1>India GST &amp; Income Tax Calculator</h1>
+      <div class="sub">Two calculators in one: GST (add/remove, with CGST·SGST·IGST split) and Income Tax under the new regime for FY 2025-26 (AY 2026-27).</div></div>
+    <div class="by">Built by <b>Jithin J</b><br><a href="https://github.com/jithinjolly2000-maker" target="_blank" rel="noopener">github.com/jithinjolly2000-maker</a></div>
+  </header>
+
+  <div class="note">ℹ️ <b>For planning &amp; reference.</b> GST uses the simplified <b>GST 2.0</b> slabs (0 / 5 / 18 / 40%, effective 22 Sep 2025). Income tax uses the <b>new-regime</b> slabs for <b>FY 2025-26</b>. Rules have exceptions (surcharge, special incomes, old-regime deductions) — confirm with a CA or the Income Tax portal before filing. Everything is calculated in your browser; nothing is uploaded.</div>
+
+  <div class="maintabs" id="maintabs">
+    <button data-t="gst" class="active">GST Calculator</button>
+    <button data-t="it">Income Tax</button>
+  </div>
+
+  <!-- ============ GST ============ -->
+  <div class="pane active" id="pane-gst">
+    <div class="card">
+      <div class="row2">
+        <div class="fld"><label>Amount (₹)</label><input id="gAmount" type="number" min="0" step="0.01" value="10000" inputmode="decimal"></div>
+        <div class="fld"><label>GST rate</label>
+          <select id="gRate">
+            <option value="0">0% (exempt / essentials)</option>
+            <option value="5">5%</option>
+            <option value="18" selected>18%</option>
+            <option value="40">40% (luxury / sin goods)</option>
+            <option value="custom">Custom…</option>
+          </select>
+          <input id="gCustom" type="number" min="0" step="0.1" placeholder="Custom rate %" style="display:none;margin-top:7px">
+        </div>
+      </div>
+      <div class="row2">
+        <div class="fld"><label>Direction</label>
+          <div class="seg" id="gDir">
+            <button data-d="add" class="active">Add GST (exclusive → inclusive)</button>
+            <button data-d="remove">Remove GST (inclusive → net)</button>
+          </div>
+        </div>
+        <div class="fld"><label>Transaction type</label>
+          <div class="seg" id="gType">
+            <button data-d="intra" class="active">Intra-state (CGST+SGST)</button>
+            <button data-d="inter">Inter-state (IGST)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="result" id="gResult"></div>
+
+    <h2>Tax split</h2>
+    <table id="gSplit"><tbody></tbody></table>
+  </div>
+
+  <!-- ============ Income Tax ============ -->
+  <div class="pane" id="pane-it">
+    <div class="card">
+      <div class="row2">
+        <div class="fld"><label>Annual income (₹)</label><input id="iIncome" type="number" min="0" step="1000" value="1500000" inputmode="decimal"></div>
+        <div class="fld"><label>Income type</label>
+          <div class="seg" id="iType">
+            <button data-d="salaried" class="active">Salaried</button>
+            <button data-d="other">Other</button>
+          </div>
+          <div class="hint">Salaried gets the ₹75,000 standard deduction.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="result" id="iResult"></div>
+
+    <h2>Slab-wise breakdown (new regime · FY 2025-26)</h2>
+    <table id="iSlabs"><thead><tr><th>Slab</th><th class="num">Rate</th><th class="num">Tax</th></tr></thead><tbody></tbody></table>
+    <div class="hint" id="iRebateNote" style="margin-top:8px"></div>
+  </div>
+
+  <footer>Static tool · vanilla HTML/CSS/JS · in-browser · GitHub Pages · <a href="https://github.com/jithinjolly2000-maker/india-tax-calculator" target="_blank" rel="noopener">source</a></footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  function rupee(n){ return "\u20b9"+Number(n.toFixed(2)).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function rupee0(n){ return "\u20b9"+Math.round(n).toLocaleString("en-IN"); }
+
+  // ---- main tabs ----
+  document.getElementById("maintabs").addEventListener("click",function(e){
+    var b=e.target.closest("button");if(!b)return;
+    Array.prototype.forEach.call(this.children,function(x){x.classList.remove("active");});b.classList.add("active");
+    var t=b.getAttribute("data-t");
+    document.getElementById("pane-gst").classList.toggle("active",t==="gst");
+    document.getElementById("pane-it").classList.toggle("active",t==="it");
+  });
+  function segHandler(id,cb){
+    document.getElementById(id).addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;
+      Array.prototype.forEach.call(this.children,function(x){x.classList.remove("active");});b.classList.add("active");cb(b.getAttribute("data-d"));});
+  }
+
+  // ---- GST ----
+  var gDir="add",gType="intra";
+  function gstRate(){ var v=document.getElementById("gRate").value; return v==="custom"?(parseFloat(document.getElementById("gCustom").value)||0):parseFloat(v); }
+  function calcGST(){
+    var amt=parseFloat(document.getElementById("gAmount").value)||0, rate=gstRate();
+    var net,gst,gross;
+    if(gDir==="add"){ net=amt; gst=amt*rate/100; gross=net+gst; }
+    else { gross=amt; net=amt/(1+rate/100); gst=gross-net; }
+    document.getElementById("gResult").innerHTML=
+      rc("Net (taxable value)",rupee(net),false)+
+      rc("GST @ "+rate+"%",rupee(gst),true)+
+      rc("Invoice value",rupee(gross),false);
+    var body;
+    if(gType==="intra"){
+      body='<tr><td>CGST @ '+(rate/2)+'%</td><td class="num">'+rupee(gst/2)+'</td></tr>'+
+           '<tr><td>SGST @ '+(rate/2)+'%</td><td class="num">'+rupee(gst/2)+'</td></tr>'+
+           '<tr class="total"><td>Total GST</td><td class="num">'+rupee(gst)+'</td></tr>';
+    } else {
+      body='<tr><td>IGST @ '+rate+'%</td><td class="num">'+rupee(gst)+'</td></tr>'+
+           '<tr class="total"><td>Total GST</td><td class="num">'+rupee(gst)+'</td></tr>';
+    }
+    document.getElementById("gSplit").querySelector("tbody").innerHTML=body;
+  }
+  function rc(l,v,big){ return '<div class="rc'+(big?' big':'')+'"><div class="l">'+l+'</div><div class="v">'+v+'</div></div>'; }
+  document.getElementById("gRate").addEventListener("change",function(){
+    document.getElementById("gCustom").style.display=this.value==="custom"?"block":"none"; calcGST(); });
+  document.getElementById("gCustom").addEventListener("input",calcGST);
+  document.getElementById("gAmount").addEventListener("input",calcGST);
+  segHandler("gDir",function(d){gDir=d;calcGST();});
+  segHandler("gType",function(d){gType=d;calcGST();});
+
+  // ---- Income Tax (New Regime FY 2025-26 / AY 2026-27) ----
+  // Slabs: 0-4L nil, 4-8L 5%, 8-12L 10%, 12-16L 15%, 16-20L 20%, 20-24L 25%, >24L 30%
+  var SLABS=[
+    {upto:400000,rate:0},
+    {upto:800000,rate:5},
+    {upto:1200000,rate:10},
+    {upto:1600000,rate:15},
+    {upto:2000000,rate:20},
+    {upto:2400000,rate:25},
+    {upto:Infinity,rate:30}
+  ];
+  var STD_DED=75000, REBATE_LIMIT=1200000, REBATE_MAX=60000, CESS=4;
+  var iType="salaried";
+  function calcIT(){
+    var income=parseFloat(document.getElementById("iIncome").value)||0;
+    var ded = iType==="salaried"?STD_DED:0;
+    var taxable=Math.max(0,income-ded);
+    var rows=[],tax=0,lower=0;
+    SLABS.forEach(function(s){
+      if(taxable>lower){
+        var band=Math.min(taxable,s.upto)-lower;
+        var t=band*s.rate/100; tax+=t;
+        var label=(lower/100000)+"L – "+(s.upto===Infinity?"above":(s.upto/100000)+"L");
+        rows.push({label:label,rate:s.rate,tax:t,band:band});
+      }
+      lower=s.upto;
+    });
+    // 87A rebate: if taxable <= 12L, rebate = min(tax, 60000)
+    var rebate=0;
+    if(taxable<=REBATE_LIMIT){ rebate=Math.min(tax,REBATE_MAX); }
+    var taxAfterRebate=Math.max(0,tax-rebate);
+    var cess=taxAfterRebate*CESS/100;
+    var total=taxAfterRebate+cess;
+
+    document.getElementById("iResult").innerHTML=
+      rc("Taxable income",rupee0(taxable),false)+
+      rc("Total tax payable",rupee0(total),true)+
+      rc("Take-home (after tax)",rupee0(income-total),false);
+
+    var body=rows.map(function(r){
+      return '<tr><td>'+r.label+'</td><td class="num">'+r.rate+'%</td><td class="num">'+(r.rate===0?'—':rupee0(r.tax))+'</td></tr>';
+    }).join("");
+    body+='<tr class="total"><td>Tax on slabs</td><td class="num"></td><td class="num">'+rupee0(tax)+'</td></tr>';
+    if(rebate>0) body+='<tr><td>Less: §87A rebate</td><td class="num"></td><td class="num">−'+rupee0(rebate)+'</td></tr>';
+    body+='<tr><td>Health &amp; education cess @ 4%</td><td class="num"></td><td class="num">'+rupee0(cess)+'</td></tr>';
+    body+='<tr class="total"><td>Total tax payable</td><td class="num"></td><td class="num">'+rupee0(total)+'</td></tr>';
+    document.getElementById("iSlabs").querySelector("tbody").innerHTML=body;
+
+    var note=document.getElementById("iRebateNote");
+    if(taxable<=REBATE_LIMIT && taxAfterRebate===0){
+      note.innerHTML="✓ With the §87A rebate (up to ₹60,000), your tax works out to <b>nil</b> — income up to ₹12 lakh taxable is effectively tax-free under the new regime"+(iType==="salaried"?" (₹12.75 lakh gross for salaried, after the ₹75,000 standard deduction)":"")+".";
+    } else { note.innerHTML="Standard deduction applied: "+(iType==="salaried"?"₹75,000":"₹0")+". §87A rebate applies only if taxable income ≤ ₹12 lakh."; }
+  }
+  document.getElementById("iIncome").addEventListener("input",calcIT);
+  segHandler("iType",function(d){iType=d;calcIT();});
+
+  calcGST(); calcIT();
+})();
+</script>
+</body>
+</html>
