@@ -24,13 +24,23 @@ Two Indian tax calculators in one page.
 - **CGST + SGST** split for intra-state, or **IGST** for inter-state
 - Net / GST / invoice-value breakdown
 
-## 💸 Income Tax Calculator (New Regime, FY 2025-26 / AY 2026-27)
+## 💸 Income Tax Calculator — configurable & future-proof
 
-- Current **7-slab** structure (nil up to ₹4L … 30% above ₹24L)
-- **₹75,000 standard deduction** for salaried
-- **Section 87A rebate** (up to ₹60,000) — so income up to **₹12 lakh taxable** (₹12.75L gross salaried) is effectively tax-free
-- **4% health & education cess**
-- Full slab-wise breakdown + take-home
+Ships with the **New Regime (FY 2025-26)** and **Old Regime** slabs, but the whole engine is
+**data-driven and editable** — so when a budget changes the rates, you update the numbers in
+seconds, no code change:
+
+- **Editable slab grid** — add / remove / change any slab, standard deduction, §87A rebate (max + income limit), and cess, right in the page; recalculates live
+- **Save / load regimes** — export your setup as a JSON file and re-import it later, or save multiple named regimes and switch between them
+- **Old vs New comparison** — enter income once, see both side by side with how much the better choice saves
+- Full **slab-wise breakdown** + take-home
+
+Ships pre-loaded with: nil up to ₹4L … 30% above ₹24L, ₹75,000 standard deduction, §87A rebate
+up to ₹60,000 (income up to ₹12L taxable effectively tax-free), 4% cess.
+
+> **Why not auto-fetch the latest rates?** There's no official government rates API, and a static
+> site can't reliably pull live data — a tool that *claimed* to would silently break. Instead the
+> rates are **editable data you control**, which stays accurate with a 30-second edit.
 
 ## ✅ Verified
 
